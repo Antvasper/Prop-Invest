@@ -1,0 +1,66 @@
+import Image from "next/image"
+import Link from "next/link"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Bed, Bath, Car, Maximize } from 'lucide-react'
+
+interface Property {
+  id: string
+  title: string
+  address: string
+  price: string
+  bedrooms: number
+  bathrooms: number
+  carSpaces: number
+  landSize: string
+  imageUrl: string
+}
+
+interface PropertyCardProps {
+  property: Property
+}
+
+export default function PropertyCard({ property }: PropertyCardProps) {
+  return (
+    <Card className="overflow-hidden">
+      <div className="relative h-48 w-full">
+        <Image
+          src={property.imageUrl || "/placeholder.svg?height=200&width=300"}
+          alt={property.title}
+          fill
+          className="object-cover"
+        />
+      </div>
+      <CardContent className="p-4">
+        <h3 className="font-bold text-lg line-clamp-1">{property.title}</h3>
+        <p className="text-sm text-muted-foreground line-clamp-1">{property.address}</p>
+        <p className="font-bold text-lg mt-2">{property.price}</p>
+        <div className="flex items-center gap-4 mt-2">
+          <div className="flex items-center gap-1">
+            <Bed className="h-4 w-4" />
+            <span className="text-sm">{property.bedrooms}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Bath className="h-4 w-4" />
+            <span className="text-sm">{property.bathrooms}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Car className="h-4 w-4" />
+            <span className="text-sm">{property.carSpaces}</span>
+          </div>
+          {property.landSize && (
+            <div className="flex items-center gap-1">
+              <Maximize className="h-4 w-4" />
+              <span className="text-sm">{property.landSize}</span>
+            </div>
+          )}
+        </div>
+      </CardContent>
+      <CardFooter className="p-4 pt-0">
+        <Link href={`/properties/${property.id}`} className="w-full">
+          <Button variant="outline" className="w-full">View Details</Button>
+        </Link>
+      </CardFooter>
+    </Card>
+  )
+}
