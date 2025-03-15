@@ -1,0 +1,38 @@
+import Image from "next/image"
+
+interface Property {
+  id: string
+  title: string
+  address: string
+  price: string
+  bedrooms: number
+  bathrooms: number
+  carSpaces: number
+  landSize: string
+  imageUrl: string
+}
+
+interface HeroImageProps {
+  property?: Property
+}
+
+export default function HeroImage({ property }: HeroImageProps) {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden rounded-xl">
+      <Image
+        src={property?.imageUrl || "/placeholder.svg?height=400&width=600"}
+        alt={property?.title || "Featured property"}
+        fill
+        className="object-cover"
+        priority
+      />
+      {property && (
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
+          <h3 className="text-xl font-bold">{property.title}</h3>
+          <p>{property.address}</p>
+          <p className="text-lg font-bold mt-2">{property.price}</p>
+        </div>
+      )}
+    </div>
+  )
+}
