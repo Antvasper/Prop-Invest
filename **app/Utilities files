@@ -1,0 +1,131 @@
+// Mock data for properties
+const mockProperties = [
+  {
+    id: "DOM-12345678",
+    title: "Modern 3 Bedroom House",
+    address: "123 Main Street, Sydney NSW 2000",
+    price: "$850,000",
+    bedrooms: 3,
+    bathrooms: 2,
+    carSpaces: 1,
+    landSize: "450 sqm",
+    imageUrl: "/placeholder.svg?height=200&width=300&text=Property+1",
+    description: "Beautiful modern home in a prime location with great investment potential.",
+    features: ["Air Conditioning", "Built-in Wardrobes", "Dishwasher", "Garden"],
+    rentalYield: "4.2%",
+    estimatedGrowth: "5.8%",
+    isRental: false,
+  },
+  {
+    id: "DOM-23456789",
+    title: "Spacious 4 Bedroom Family Home",
+    address: "456 Park Avenue, Melbourne VIC 3000",
+    price: "$950,000",
+    bedrooms: 4,
+    bathrooms: 2,
+    carSpaces: 2,
+    landSize: "600 sqm",
+    imageUrl: "/placeholder.svg?height=200&width=300&text=Property+2",
+    description: "Spacious family home with great investment potential in a growing suburb.",
+    features: ["Pool", "Outdoor Entertainment Area", "Study", "Walk-in Pantry"],
+    rentalYield: "3.9%",
+    estimatedGrowth: "6.2%",
+    isRental: false,
+  },
+  {
+    id: "DOM-34567890",
+    title: "Luxury Apartment with City Views",
+    address: "789 High Street, Brisbane QLD 4000",
+    price: "$650,000",
+    bedrooms: 2,
+    bathrooms: 2,
+    carSpaces: 1,
+    landSize: "",
+    imageUrl: "/placeholder.svg?height=200&width=300&text=Property+3",
+    description: "Luxury apartment with stunning city views and excellent rental potential.",
+    features: ["Gym", "Swimming Pool", "Security System", "Balcony"],
+    rentalYield: "5.1%",
+    estimatedGrowth: "4.5%",
+    isRental: false,
+  },
+  {
+    id: "DOM-45678901",
+    title: "Renovated 2 Bedroom Unit",
+    address: "101 Beach Road, Perth WA 6000",
+    price: "$450 per week",
+    bedrooms: 2,
+    bathrooms: 1,
+    carSpaces: 1,
+    landSize: "",
+    imageUrl: "/placeholder.svg?height=200&width=300&text=Property+4",
+    description: "Newly renovated unit in a great location, perfect for investors.",
+    features: ["Renovated Kitchen", "New Bathroom", "Close to Transport", "Built-in Wardrobes"],
+    rentalYield: "5.5%",
+    estimatedGrowth: "3.8%",
+    isRental: true,
+  },
+  {
+    id: "DOM-56789012",
+    title: "Family Home with Pool",
+    address: "202 River Road, Adelaide SA 5000",
+    price: "$520 per week",
+    bedrooms: 3,
+    bathrooms: 2,
+    carSpaces: 2,
+    landSize: "500 sqm",
+    imageUrl: "/placeholder.svg?height=200&width=300&text=Property+5",
+    description: "Spacious family home with pool in a sought-after suburb.",
+    features: ["Swimming Pool", "Outdoor Entertainment Area", "Air Conditioning", "Dishwasher"],
+    rentalYield: "4.8%",
+    estimatedGrowth: "4.2%",
+    isRental: true,
+  },
+  {
+    id: "DOM-67890123",
+    title: "Modern Townhouse",
+    address: "303 Mountain View, Hobart TAS 7000",
+    price: "$380 per week",
+    bedrooms: 2,
+    bathrooms: 1,
+    carSpaces: 1,
+    landSize: "200 sqm",
+    imageUrl: "/placeholder.svg?height=200&width=300&text=Property+6",
+    description: "Modern townhouse in a quiet neighborhood with good rental returns.",
+    features: ["Modern Kitchen", "Private Courtyard", "Close to Schools", "Built-in Wardrobes"],
+    rentalYield: "5.2%",
+    estimatedGrowth: "3.5%",
+    isRental: true,
+  },
+];
+
+// Function to get featured properties
+export async function getFeaturedProperties(limit = 3) {
+  // In a real app, this would fetch from an API
+  // For now, we'll use mock data
+  return mockProperties
+    .filter(property => !property.isRental)
+    .slice(0, limit);
+}
+
+// Function to get rental properties
+export async function getRentalProperties(limit = 3) {
+  // In a real app, this would fetch from an API
+  // For now, we'll use mock data
+  return mockProperties
+    .filter(property => property.isRental)
+    .slice(0, limit);
+}
+
+// Function to get all properties
+export async function getAllProperties(isRental = false) {
+  // In a real app, this would fetch from an API
+  // For now, we'll use mock data
+  return mockProperties.filter(property => property.isRental === isRental);
+}
+
+// Function to get a property by ID
+export async function getPropertyById(id: string) {
+  // In a real app, this would fetch from an API
+  // For now, we'll use mock data
+  return mockProperties.find(property => property.id === id) || null;
+}
