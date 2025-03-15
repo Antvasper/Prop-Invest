@@ -1,0 +1,201 @@
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Search } from 'lucide-react'
+import HeroImage from "@/components/hero-image"
+import FeatureCard from "@/components/feature-card"
+import { getFeaturedProperties, getRentalProperties } from "@/lib/properties"
+import PropertyCard from "@/components/property-card"
+
+export default async function Home() {
+  // Fetch featured properties
+  const featuredProperties = await getFeaturedProperties(3)
+
+  // Fetch rental properties
+  const rentalProperties = await getRentalProperties(3)
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <header className="border-b">
+        <div className="container flex h-16 items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground font-bold">PI</span>
+            </div>
+            <span className="font-bold">PropInvest</span>
+          </div>
+          <nav className="hidden md:flex items-center gap-6">
+            <Link href="/" className="text-sm font-medium">
+              Home
+            </Link>
+            <Link href="/properties" className="text-sm font-medium">
+              Properties
+            </Link>
+            <Link href="/calculator" className="text-sm font-medium">
+              ROI Calculator
+            </Link>
+            <Link href="/about" className="text-sm font-medium">
+              About
+            </Link>
+          </nav>
+          <div className="flex items-center gap-4">
+            <Link href="/login">
+              <Button variant="outline" size="sm">
+                Log in
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button size="sm">Sign up</Button>
+            </Link>
+          </div>
+        </div>
+      </header>
+      <main className="flex-1">
+        <section className="py-12 md:py-24 lg:py-32 bg-muted">
+          <div className="container px-4 md:px-6">
+            <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
+              <div className="flex flex-col justify-center space-y-4">
+                <div className="space-y-2">
+                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                    Find Your Next Investment Property in Australia
+                  </h1>
+                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                    Discover high-performing investment properties and calculate potential ROI with our advanced tools.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input type="search" placeholder="Enter suburb, postcode or city..." className="pl-8 w-full" />
+                  </div>
+                  <Link href="/properties">
+                    <Button>Search Properties</Button>
+                  </Link>
+                </div>
+              </div>
+              <HeroImage property={featuredProperties[0]} />
+            </div>
+          </div>
+        </section>
+        <section className="py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Why Choose PropInvest?</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Our platform provides everything you need to make informed investment decisions in the Australian
+                  property market.
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3 lg:gap-12 mt-8">
+              <FeatureCard
+                title="Accurate ROI Calculations"
+                description="Get detailed ROI projections based on real market data, rental yields, and expenses."
+                icon="Calculator"
+              />
+              <FeatureCard
+                title="Market Insights"
+                description="Access suburb growth trends, rental demand, and future growth predictions."
+                icon="LineChart"
+              />
+              <FeatureCard
+                title="Property Comparison"
+                description="Compare multiple properties side by side to find the best investment opportunity."
+                icon="BarChart"
+              />
+            </div>
+          </div>
+        </section>
+        <section className="py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Featured Properties</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Explore our selection of high-performing investment properties
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {featuredProperties.map((property) => (
+                <PropertyCard key={property.id} property={property} />
+              ))}
+            </div>
+            <div className="flex justify-center mt-8">
+              <Link href="/properties">
+                <Button variant="outline">View All Properties</Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        <section className="py-12 md:py-24 lg:py-32 bg-muted">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                  Featured Rental Properties
+                </h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Looking for rental income? Check out these high-yield rental properties
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {rentalProperties.map((property) => (
+                <PropertyCard key={property.id} property={property} />
+              ))}
+            </div>
+            <div className="flex justify-center mt-8">
+              <Link href="/properties?isRental=true">
+                <Button variant="outline">View All Rental Properties</Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        <section className="py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                  Ready to Start Investing?
+                </h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Join thousands of investors who have found their perfect property with PropInvest.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <Link href="/signup">
+                  <Button size="lg">Get Started</Button>
+                </Link>
+                <Link href="/calculator">
+                  <Button variant="outline" size="lg">
+                    Try ROI Calculator
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer className="border-t py-6 md:py-0">
+        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+            © 2025 PropInvest. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <Link href="/terms" className="text-sm text-muted-foreground">
+              Terms
+            </Link>
+            <Link href="/privacy" className="text-sm text-muted-foreground">
+              Privacy
+            </Link>
+            <Link href="/contact" className="text-sm text-muted-foreground">
+              Contact
+            </Link>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
