@@ -1,0 +1,140 @@
+// Mock user database for preview
+export const mockUsers = [
+{
+  id: "user1",
+  name: "Demo User",
+  email: "demo@example.com",
+  password: "password123", // In a real app, this would be hashed
+  image: null,
+  subscriptionStatus: "free",
+  searchCount: 2,
+  savedProperties: ["DOM-12345678", "DOM-23456789"],
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+},
+{
+  id: "user2",
+  name: "Premium User",
+  email: "premium@example.com",
+  password: "password123", // In a real app, this would be hashed
+  image: null,
+  subscriptionStatus: "premium",
+  searchCount: 10,
+  savedProperties: ["DOM-12345678", "DOM-23456789", "DOM-34567890"],
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+},
+]
+
+// Mock subscriptions database
+export const mockSubscriptions = [
+{
+  id: "sub1",
+  userId: "user2",
+  stripeCustomerId: "cus_123",
+  stripeSubscriptionId: "sub_123",
+  stripePriceId: "price_123",
+  stripeCurrentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+},
+]
+
+// In-memory database operations
+export const db = {
+user: {
+  findUnique: async ({ where }: { where: { id?: string; email?: string } }) => {
+    if (where.id) {
+      return mockUsers.find((user) => user.id === where.id) || null
+    }
+    if (where.email) {
+      return mockUsers.find((user) => user.email === where.email) || null
+    }
+    return null
+  },
+  findFirst: async ({ where }: { where: any }) => {
+    if (where.email) {
+      return mockUsers.find((user) => user.email === where.email) || null
+    }
+    if (where.customerId) {
+      return mockUsers.find((user) => user.id === "user2") || null
+    }
+    return null
+  },
+  create: async ({ data }: { data: any }) => {
+    const newUser = {
+      id: `user${mockUsers.length + 1}`,
+      ...data,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    mockUsers.push(newUser)
+    return newUser
+  },
+  update: async ({ where, data }: { where: { id: string }; data: any }) => {
+    const userIndex = mockUsers.findIndex((user) => user.id === where.id)
+    if (userIndex === -1) return null
+
+    const updatedUser = {
+      ...mockUsers[userIndex],
+      ...data,
+      updatedAt: new Date().toISOString(),
+    }
+
+    // Handle special case for savedProperties.push
+    if (data.savedProperties && data.savedProperties.push) {
+      updatedUser.savedProperties = [...mockUsers[userIndex].savedProperties, data.savedProperties.push]
+    }
+
+    // Handle special case for savedProperties.set
+    if (data.savedProperties && data.savedProperties.set) {
+      updatedUser.savedProperties = data.savedProperties.set
+    }
+
+    mockUsers[userIndex] = updatedUser
+    return updatedUser
+  },
+},
+subscription: {
+  findUnique: async ({ where }: { where: { stripeSubscriptionId: string } }) => {
+    return mockSubscriptions.find((sub) => sub.stripeSubscriptionId === where.stripeSubscriptionId) || null
+  },
+  findFirst: async ({ where }: { where: any }) => {
+    if (where.userId) {
+      return mockSubscriptions.find((sub) => sub.userId === where.userId) || null
+    }
+    return null
+  },
+  create: async ({ data }: { data: any }) => {
+    const newSubscription = {
+      id: `sub${mockSubscriptions.length + 1}`,
+      ...data,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    mockSubscriptions.push(newSubscription)
+    return newSubscription
+  },
+  update: async ({ where, data }: { where: { id: string }; data: any }) => {
+    const subIndex = mockSubscriptions.findIndex((sub) => sub.id === where.id)
+    if (subIndex === -1) return null
+
+    const updatedSubscription = {
+      ...mockSubscriptions[subIndex],
+      ...data,
+      updatedAt: new Date().toISOString(),
+    }
+
+    mockSubscriptions[subIndex] = updatedSubscription
+    return updatedSubscription
+  },
+  delete: async ({ where }: { where: { stripeSubscriptionId: string } }) => {
+    const subIndex = mockSubscriptions.findIndex((sub) => sub.stripeSubscriptionId === where.stripeSubscriptionId)
+    if (subIndex === -1) return null
+
+    const deletedSubscription = mockSubscriptions[subIndex]
+    mockSubscriptions.splice(subIndex, 1)
+    return deletedSubscription
+  },
+},
+}
