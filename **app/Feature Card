@@ -1,0 +1,38 @@
+import { Calculator, LineChart, BarChart, Home, Search, DollarSign } from 'lucide-react'
+
+interface FeatureCardProps {
+  title: string
+  description: string
+  icon: string
+}
+
+export default function FeatureCard({ title, description, icon }: FeatureCardProps) {
+  const IconComponent = () => {
+    switch (icon) {
+      case "Calculator":
+        return <Calculator className="h-10 w-10 text-primary" />
+      case "LineChart":
+        return <LineChart className="h-10 w-10 text-primary" />
+      case "BarChart":
+        return <BarChart className="h-10 w-10 text-primary" />
+      case "Home":
+        return <Home className="h-10 w-10 text-primary" />
+      case "Search":
+        return <Search className="h-10 w-10 text-primary" />
+      case "DollarSign":
+        return <DollarSign className="h-10 w-10 text-primary" />
+      default:
+        return <Home className="h-10 w-10 text-primary" />
+    }
+  }
+
+  return (
+    <div className="flex flex-col items-center text-center">
+      <div className="mb-4 rounded-full bg-primary/10 p-4">
+        <IconComponent />
+      </div>
+      <h3 className="text-xl font-bold">{title}</h3>
+      <p className="text-muted-foreground">{description}</p>
+    </div>
+  )
+}
